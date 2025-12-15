@@ -4,6 +4,24 @@ import joblib
 import matplotlib.pyplot as plt
 
 # ======================================================
+# WAJIB: Definisi class SimpleKNN (HARUS ADA)
+# ======================================================
+class SimpleKNN:
+    def __init__(self, X_train, y_train, k=5):
+        self.X_train = X_train
+        self.y_train = y_train
+        self.k = k
+
+    def predict(self, X):
+        preds = []
+        for x in X:
+            dists = np.linalg.norm(self.X_train - x, axis=1)
+            idx = np.argsort(dists)[:self.k]
+            votes = self.y_train[idx]
+            preds.append(np.bincount(votes).argmax())
+        return np.array(preds)
+
+# ======================================================
 # Load Model dan Encoder
 # ======================================================
 @st.cache_resource
@@ -68,7 +86,7 @@ else:
     input_series = parsed_series
 
 # ======================================================
-# Visualisasi Input
+# Visualisasi
 # ======================================================
 st.subheader("📈 Visualisasi Time Series")
 
@@ -83,7 +101,7 @@ st.pyplot(fig)
 # Prediksi
 # ======================================================
 if st.button("🔍 Prediksi Musim"):
-    X_input = input_series.reshape(1, -1)  # flatten
+    X_input = input_series.reshape(1, -1)
 
     pred_idx = model.predict(X_input)[0]
     pred_label = encoder.inverse_transform([pred_idx])[0]
