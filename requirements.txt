@@ -1,4 +1,5 @@
-streamlit
+streamlit==1.52.1
 numpy
-joblib
 matplotlib
+joblib
+scikit-learn
